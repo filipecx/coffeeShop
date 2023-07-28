@@ -25,8 +25,11 @@ module.exports = {
     updateItem: async (req, res) => {
       
         try{
-           await Item.findByIdAndUpdate(req.params.id, req.body)
-        }catch(e){
+
+            const resultImg = await cloudinary.uploader.upload(req.file.path)
+            await Item.findByIdAndUpdate(req.params.id, ({nomeDoItem: req.body.nomeDoItem, descricaoItem: req.body.descricaoItem, precoItem: req.body.precoItem, imagem: resultImg.secure_url, cloudinaryId: resultImg.public_id}))
+        }
+        catch(e){
             console.log(e)
         }
     },
