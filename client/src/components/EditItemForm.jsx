@@ -9,6 +9,7 @@ export function EditItemForm(data){
     const [nomeDoItem, setNomeItem] = useState('');
     const [descricaoItem, setDescricaoItem] = useState('');
     const [precoItem, setPrecoItem] = useState('');
+    const [img, setImg] = useState('')
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -19,12 +20,16 @@ export function EditItemForm(data){
     
     const atualizaItem = (e) => {
         e.preventDefault();
-        Axios.put(`http://localhost:3001/editItem/${data.state.id}`, {
-            nomeDoItem: nomeDoItem,
-            descricaoItem: descricaoItem,
-            precoItem: precoItem,
-         
-        })
+        const formData = new FormData()
+        formData.append('nomeDoItem', nomeDoItem)
+        formData.append('descricaoItem', descricaoItem)
+        formData.append('precoItem', precoItem)
+        formData.append('file', img)
+        
+        Axios.put(`http://localhost:3001/editItem/${data.state.id}`, formData, {
+            headers: {
+            "Content-Type": `multipart/form-data`
+            }})
         .then(function (response){
             
             console.log(`A resposta ${response}`)
@@ -35,7 +40,7 @@ export function EditItemForm(data){
         navigate('/getItems')
     }
     return(
-        <Form onSubmit={atualizaItem}>
+        <Form onSubmit={atualizaItem} encType="multipart/form-data">
             <Form.Group className="mb-3" controlId="formBasicNomeItem">
                 <Form.Label>Nome do item</Form.Label>
                 <Form.Control onChange={(e) => setNomeItem(e.target.value)} value={nomeDoItem}/>
@@ -47,6 +52,10 @@ export function EditItemForm(data){
             <Form.Group className="mb-3" controlId="formBasicPrecoItem" >
                 <Form.Label>Preço do item</Form.Label>
                 <Form.Control  onChange={(e) => setPrecoItem(e.target.value)} value={precoItem}/>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Imagem do item</Form.Label>
+                <Form.Control type='file' onChange={(e) => setImg(e.target.files[0])} id='file' name='file' />
             </Form.Group>
             <Button type='submit' variant='dark'>
                 Enviar
