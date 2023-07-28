@@ -7,7 +7,7 @@ router.get('/', itensController.getItens)
 
 router.post('/createItem', upload.single("file"), itensController.createItem)
 
-router.put('/editItem/:id', itensController.updateItem)
+router.put('/editItem/:id', upload.single("file"), itensController.updateItem)
 
 router.delete('/deleteItem', itensController.deleteItem)
 
