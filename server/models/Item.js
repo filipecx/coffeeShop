@@ -12,6 +12,14 @@ const ItemSchema = new mongoose.Schema({
     precoItem: {
         type: String,
         required: true
+    },
+    imagem: {
+        type: String,
+        required: true
+    },
+    cloudinaryId: {
+        type: String,
+        required: true
     }
 })
 
